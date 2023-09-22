@@ -1,0 +1,10 @@
+flask
+diffusers
+transformers
+accelerate
+torch 
+torchvision 
+torchaudio
+matplotlib
+flask_cors
+pillow==8.2.0

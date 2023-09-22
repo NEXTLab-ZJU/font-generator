@@ -1,0 +1,13 @@
+flask
+diffusers
+transformers
+accelerate
+torch 
+torchvision 
+torchaudio
+matplotlib
+flask_cors
+pillow==9.1.0
+opencv-python
+scikit-image
+tensorboardX
