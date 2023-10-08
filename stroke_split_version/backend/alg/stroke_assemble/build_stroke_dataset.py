@@ -35,13 +35,13 @@ def calculate_bbox_ranger(rect):
 def calculate_overlap_area(rect1, rect2):
     x1, x2, y1, y2 = rect1.values()
     x3, x4, y3, y4 = rect2.values()
-    # 计算水平方向上的重叠长度
+    # Calculate the horizontal overlap length.
     horizontal_overlap = max(0, min(x2, x4) - max(x1, x3))
     
-    # 计算垂直方向上的重叠长度
+    # Calculate the vertical overlap length.
     vertical_overlap = max(0, min(y2, y4) - max(y1, y3))
 
-    # 计算重叠部分的面积
+    # Calculate the area of the overlapping part.
     overlap_area = horizontal_overlap * vertical_overlap
     area1 = (x2-x1)*(y2-y1)
     area2 = (x4-x3)*(y4-y3)
@@ -78,7 +78,7 @@ class Build_Stokre_Dataset(object):
         overlap_info.update(overlap_pixel_info)
 
         if overlap_info['overlap_pixel'] or overlap_info['overlap_area']:
-            # 根据两个笔画类别构建关键字，要求类别编号较小的在前，较大的在后
+            # Construct keywords based on two stroke categories, with the category with the smaller number coming first and the larger one coming second.
             if stroke_type1 <= stroke_type2:
                 id = str(stroke_type1)+'_'+str(stroke_type2)
             else:
@@ -95,7 +95,7 @@ class Build_Stokre_Dataset(object):
                     self.dataset['basic_information']['stroke_relation'][id][key]=[value]
                     
     def update_stroke_realation(self,infos):
-        # 统计字符内部不同笔画之间的像素覆盖，包围盒覆盖关系
+        # Count the pixel coverage between different strokes within a character, including bounding box coverage relationships.
         for i in range(len(infos)):
             stroke1 = infos[i]
             stroke_type1 = stroke1["type"]
@@ -105,7 +105,7 @@ class Build_Stokre_Dataset(object):
                 stroke_type2 = stroke2["type"]
                 bbox2 = stroke2["bbox"]
 
-                # 计算任意两个笔画之间的像素覆盖，包围盒覆盖关系
+                # Calculate the pixel coverage between any two strokes, including bounding box coverage relationships.
                 overlap_area_info =  calculate_overlap_area(bbox1,bbox2)
                 overlap_pixel_info =  calculate_overlap_pixel(stroke1,stroke2)
                 self.update_stroke_realation_overlap_info(stroke_type1,stroke_type2,overlap_area_info,overlap_pixel_info)
@@ -114,13 +114,13 @@ class Build_Stokre_Dataset(object):
     def update_dataset(self,infos,path):
         stroke_num = len(infos)
         
-        # 以笔画数为关键词-字符为值建立字典
+        # Create a dictionary where the number of strokes serves as the key, and the corresponding characters serve as the values.
         if stroke_num in self.dataset['reference_by_stroke_num'].keys():
             self.dataset['reference_by_stroke_num'][stroke_num].append(path)
         else:
             self.dataset['reference_by_stroke_num'][stroke_num] = [path]
         
-         # 对每一种类型的笔画进行统计
+        # Count each type of stroke.
         total_types= set()
         for info in infos:
             stroke_type = info["type"]
@@ -142,19 +142,19 @@ class Build_Stokre_Dataset(object):
                     'contour':[info]
                     }
                     
-        # 统计笔画在字符中出现的频率（只考虑笔画有没有出现，不考虑笔画的数量）
+        # Count the frequency of strokes appearing in characters, considering only whether a stroke has appeared or not, regardless of the quantity of strokes.
         for stroke_type in list(total_types):
             self.dataset['vector_data'][stroke_type]['stroke_freq']+=1
         
-        # 统计字符内部不同笔画之间的像素覆盖，包围盒覆盖关系
+        # Count the pixel coverage between different strokes within characters, including bounding box coverage relationships.
         self.update_stroke_realation(infos)
 
     def summarize(self):
-        # 统计不同汉字笔画数目的频率分布
+        # Calculate the frequency distribution of the number of strokes in different Chinese characters.
         for key,value in self.dataset['reference_by_stroke_num'].items():
             self.dataset['basic_information']['stroke_num_distribution'][key] = len(value)
 
-        # 统计笔画之间的覆盖关系
+        # Count the coverage relationships between strokes.
         for relation_id in self.dataset['basic_information']['stroke_relation'].keys():
             summary = {}
             summary['num'] = len(self.dataset['basic_information']['stroke_relation'][relation_id]['overlap_area'])
@@ -166,7 +166,7 @@ class Build_Stokre_Dataset(object):
                 }
             self.dataset['basic_information']['stroke_relation'][relation_id] = summary
         
-        # 统计每个类别笔画的数据，包括最素值，包围盒长宽
+        # Collect stroke data for each category, including minimum value and bounding box dimensions
         for stroke_type in self.dataset['vector_data'].keys():
 
             self.dataset['vector_data'][stroke_type]['pixel'] = {

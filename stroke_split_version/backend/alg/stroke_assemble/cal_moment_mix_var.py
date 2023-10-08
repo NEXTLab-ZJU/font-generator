@@ -55,18 +55,18 @@ def refine_img(img,canvas_size,tar_size=None):
         img = transforms.ToTensor()(img)
     except SystemError:
         return None
-    img = img.unsqueeze(0)  # 加轴
-    pad_len = int(abs(width - height) / 2)  # 预填充区域的大小
-    # 需要填充区域，如果宽大于高则上下填充，否则左右填充
+    img = img.unsqueeze(0)  
+    pad_len = int(abs(width - height) / 2)  
+
     if width > height:
         fill_area = (0, 0, pad_len, pad_len)
     else:
         fill_area = (pad_len, pad_len, 0, 0)
-    # 填充像素常值
+
     fill_value = 1
     img = nn.ConstantPad2d(fill_area, fill_value)(img)
-    # img = nn.ZeroPad2d(m)(img) #直接填0
-    img = img.squeeze(0)  # 去轴
+    # img = nn.ZeroPad2d(m)(img) #
+    img = img.squeeze(0)  # 
     img = transforms.ToPILImage()(img)
     img = img.resize((tar_size, tar_size), Image.ANTIALIAS)
     return np.array(img),bbox

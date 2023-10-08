@@ -43,7 +43,7 @@ def matrix2contour(matrix):
     return contour
 
 
-#将矢量点根据包围盒标准化
+# Normalize vector points based on the bounding box.
 def resize_contour(contours,bbox,canvas_size):
     l, u, r, d = bbox
     l = max(0, l - 5)
@@ -71,8 +71,8 @@ def resize_contour(contours,bbox,canvas_size):
             contours[i][j]['x'] += canvas_size/2
     return contours
 
-# 处理可变字体
-# 对于笔画粗细可变的字体，取默认、最粗、平均值三种构建对应contour
+# Handling Variable Fonts
+# For variable fonts with varying stroke thickness, construct corresponding contours using three options: default, thickest, and average.
 def var_font_filter(var_contours,return_average=False):
     var_flag = False
     for c in var_contours:
@@ -136,7 +136,7 @@ def var_font_filter(var_contours,return_average=False):
 
     return[contours1,contours2,contours3]
 
-# 将二次型贝塞尔曲线转为三次型
+# Convert quadratic Bézier curves to cubic Bézier curves.
 def quadratic2cubic_contours(contours):
     contours = [regularize_quadratic_contour(c) for c in contours]
     for c in contours:
@@ -167,13 +167,13 @@ def quadratic2cubic_contours(contours):
     
     return contours
 
-# 计算二次型贝塞尔曲线转为三次型时，对应的三次型曲线中的两个离轨控制点
+# Calculate the two off-curve control points in the corresponding cubic Bézier curve when converting from a quadratic Bézier curve to a cubic one.
 def quadratic2cubic(x0, y0, x1, y1, x2, y2):
     cx1 = x0 + (x1-x0)*2/3; cy1 = y0 + (y1-y0)*2/3
     cx2 = x2 + (x1-x2)*2/3; cy2 = y2 + (y1-y2)*2/3
     return ( cx1, cy1, cx2, cy2 )
 
-# 对二次型贝塞尔曲线中省略的在轨控制点
+# The omitted on-curve control point in a quadratic Bézier curve
 def regularize_quadratic_contour(contour):
     result = []
     if not contour[0]['on']:
@@ -217,7 +217,7 @@ def regularize_quadratic_contour(contour):
 
     return [] if not result else (result[max_on_i:] + result[:max_on_i])
 
-# 利用向量叉积计算轨迹走向（svg中由于轮廓坐标上下翻转，因此外围曲线是顺时针，这与原始轮廓中正好相反）
+# Calculate the trajectory direction using vector cross product (in SVG, due to the vertical flip of contour coordinates, the outer contour is clockwise, which is the opposite of the original contour).
 def judge_contour_orientation(contour):
     on_pts_x = []
     on_pts_y = []
@@ -252,7 +252,7 @@ def judge_contour_orientation(contour):
     else:
         return 'counterclockwise'
 
-# 根据contour中点的坐标粗略计算包围盒大小，可以通过所有控制点计算也可以仅通过在轨控制点计算
+# Roughly calculate the bounding box size based on the coordinates of the contour's midpoint. This calculation can be done using all control points or only using the on-curve control points.
 def get_box(contour,mode='simple_any'):
     pts_x = []
     pts_y = []
@@ -274,7 +274,7 @@ def get_box(contour,mode='simple_any'):
 
     return {'coordinate':(x_min,x_max,y_min,y_max),'area':(x_max-x_min)*(y_max-y_min)}
 
-# 根据包围盒坐标计算一个contour是否在另一个contour内部
+# Calculate whether one contour is inside another contour based on the bounding box coordinates.
 def box1_in_box2(box1,box2):
     x1_min, x1_max, y1_min, y1_max = box1['coordinate']
     x2_min, x2_max, y2_min, y2_max = box2['coordinate']
@@ -284,7 +284,7 @@ def box1_in_box2(box1,box2):
     else:
         return False
 
-# 建立外轮廓与内轮廓的连接关系，同一连通域内，内轮廓的uplinked是外轮廓，没有downlink，外轮廓的uplink是自己本身，downlink是自己与所有内轮廓
+# Establish the connectivity relationship between the outer contour and inner contours. Within the same connected domain, the inner contours are uplinked to the outer contour with no downlink, while the outer contour is uplinked to itself and has downlinks to all inner contours.
 def get_contour_link(contours):
     contour_orientation=[]
     contour_link = {}
@@ -303,7 +303,7 @@ def get_contour_link(contours):
     for i,contour in enumerate(contour_orientation):
         if contour[0] == 'counterclockwise':
             min_box = 1000000000
-            # 寻找最小包围该内轮廓的外轮廓
+            # Find the smallest outer contour that encloses the inner contour.
             for j,c in enumerate(contour_orientation):
                 if c[0] == 'clockwise' and box1_in_box2(contour[1],c[1]) and c[1]['area'] < min_box:
                     min_box = c[1]['area']

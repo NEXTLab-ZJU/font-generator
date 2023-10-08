@@ -28,7 +28,7 @@ class Create_Training_Set(object):
         self.upm=512
         self.uinicode = 0
         self.label_colors = {
-                0: (0, 0, 0),  # 未标注
+                0: (0, 0, 0),  
                 255: (1, 1, 1)
             }
     def isfinished(self):

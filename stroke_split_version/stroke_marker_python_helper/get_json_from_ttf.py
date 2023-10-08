@@ -3,7 +3,7 @@ import json,os
 from contour_tools import quadratic2cubic_contours
 from skimage import io
 from tqdm import tqdm
-# 加载字体文件：
+# load font file
 def get_char_dict(glyf_table):
     dict ={}
     for key in glyf_table.glyphs.keys():

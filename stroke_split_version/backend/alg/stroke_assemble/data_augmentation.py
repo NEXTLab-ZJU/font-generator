@@ -53,13 +53,13 @@ params = {
 def calculate_overlap_area(rect1, rect2):
     x1, x2, y1, y2 = rect1.values()
     x3, x4, y3, y4 = rect2.values()
-    # 计算水平方向上的重叠长度
+    # Calculate the horizontal overlap length
     horizontal_overlap = max(0, min(x2, x4) - max(x1, x3))
     
-    # 计算垂直方向上的重叠长度
+    # Calculate the vertical overlap length.
     vertical_overlap = max(0, min(y2, y4) - max(y1, y3))
 
-    # 计算重叠部分的面积
+    # Calculate the area of the overlapping portion
     overlap_area = horizontal_overlap * vertical_overlap
     area1 = (x2-x1)*(y2-y1)
     area2 = (x4-x3)*(y4-y3)
@@ -210,7 +210,7 @@ class Data_Augmentation(object):
         stroke_ori = random.choice(self.stroke_dataset['vector_data'][stroke_type]['contour'])
         stroke_new = deepcopy(stroke_ori)
 
-        # 1,根据包围盒将矢量移动到关于原点对称
+        # 1 Move the vector to be symmetric with respect to the origin based on the bounding box.
         x_bias_ori = (stroke_ori['bbox']['x_max']+stroke_ori['bbox']['x_min'])/2
         y_bias_ori = (stroke_ori['bbox']['y_max']+stroke_ori['bbox']['y_min'])/2
 
@@ -220,7 +220,7 @@ class Data_Augmentation(object):
         
         coordinate_central = stroke_ori['matrix']['cordinate']@transfer_1
 
-        # 2，根据进行随即缩放和旋转
+        # 2 Random scaling and rotation based on
         x_range = stroke_ori['bbox']['x_max']-stroke_ori['bbox']['x_min']
         y_range = stroke_ori['bbox']['y_max']-stroke_ori['bbox']['y_min']
 

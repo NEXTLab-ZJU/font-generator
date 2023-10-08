@@ -48,14 +48,14 @@ class zi2ziMain(object):
         self.parser = parser
         self.train_process = 0
         self.infer_process = 0
-        #模型保存目录
+        # model save dir
         #self.output_dir = savePath
-        #模型训练数据地址
+        # model train dir
         #self.train_data_dir = dataDir
-        #模型训练轮次
+
         self.epoch = epoch
         self.device = device
-        #模型保存地址
+
         '''
         self.ckpt_dir = os.path.join(self.output_dir, "checkpoint")
         self.infer_dir = infer_dir
@@ -67,13 +67,7 @@ class zi2ziMain(object):
         return self.train_process
     def getInferState(self):
         return self.infer_process
-    '''
-    图像处理列表
-    类别列表
-    infer保存目录
-    src字符数组
-    ckpt_dir模型地址
-    '''
+
     def infer(self,img_list,label_list,ckpt_dir,infer_dir,src,epoch):
         args = self.parser.parse_args()
         model = Zi2ZiModel(
@@ -105,7 +99,7 @@ class zi2ziMain(object):
         print(self.infer_process)
     
     '''
-    resume 0 训练 1 fintune
+    resume 0 train 1 fintune
     '''
     def train(self,learn_rate,checkpoint_dir,data_dir,resume=0):
         args = self.parser.parse_args()

@@ -347,11 +347,11 @@ export default {
             let d = "M " + points[0].x + " " + points[0].y;
             for (let i = 1; i < points.length;) {
                 if (points[i].on) {
-                    //如果是直线
+                    // if straight line
                     d += " L " + points[i].x + " " + points[i].y
                     i = i + 1
                 } else {
-                    // 使用三次贝塞尔曲线命令C  
+                    // use cubic curve
                     if (i + 2 == points.length) {
                         d += " C " + points[i].x + " " + points[i].y + " "
                             + points[i + 1].x + " " + points[i + 1].y + " "

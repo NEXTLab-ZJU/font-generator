@@ -57,14 +57,14 @@ class Zi2ziFont(object):
         self.basePicPath = base_zi2zi_path + '/base_train_data/'
         self.testPicpath = base_zi2zi_path + '/test_pic/'
         self.inferPicPath = base_zi2zi_result_path + '/infer_data/'
-        #训练过程 stage=2 表示fintune
+        #train pos stage=2 -> fintune
         self.stage = 1 
-        #参照字体
+        #target font
         self.src_font = base_zi2zi_path + '/data/font_src/hywh.ttf'
         self.char_path= base_zi2zi_path + '/charset/gb2312.txt'
         self.charlist= list(open(self.char_path, encoding='utf-8').readline().strip())
         self.train_char = []
-        #self.train_data = './Zi2zi/experiment/data'
+        # self.train_data = './Zi2zi/experiment/data'
         self.train_data = base_zi2zi_result_path + '/data'
         self.fintune_data = base_zi2zi_result_path + '/finetune/data'
         self.ckpt_dir = base_zi2zi_result_path + '/train_result/'
@@ -183,22 +183,22 @@ class Zi2ziFont(object):
 
 if __name__ == "__main__":
     '''
-    #输入训练的数据dir 
-    zi2zi = Zi2ziFont('./Zi2zi/100/',1)# 第一个参数100图片路径，第二个epoch但是有默认，1是为了测试，实际用时去掉 
-    要求：图片以中文汉字命名，例如，我.jpg或者我.png 
+    # Please input the directory containing the training data.
+    zi2zi = Zi2ziFont('./Zi2zi/100/',1)# The first parameter is the path to the first 100 images, and the second parameter is the number of epochs (although there is a default value, you can remove it when actually using it).
+    Requirement: The images should be named using Chinese characters, for example, "我.jpg" or "我.png".
     
-    #模型启动训练 包含两步，训练+fintune
+    # The model training process consists of two steps: training and fine-tuning.
     zi2zi.main_train()
     
-    print(zi2zi.getTrainState())#训练进度
+    print(zi2zi.getTrainState())
     
-    #获取ckpt路径
+    # To obtain the checkpoint (ckpt) file path:
     result = zi2zi.getCkptDir() #ckptdir
 
-    zi2zi.infer('我们是天下第一',zi2zi.ckpt_dir,1)#第一个参数字符集，第二个ckptdir，第三个参数1 为epoch，测试时用，实际使用时去掉
+    zi2zi.infer('我们是天下第一',zi2zi.ckpt_dir,1)# The first parameter is the character set, the second parameter is the checkpoint directory (ckptdir), and the third parameter is 1 for the number of epochs (used for testing, remove it for actual usage).
     
-    print(zi2zi.getInferResult())#测试结果路径
+    print(zi2zi.getInferResult())
     
-    print(zi2zi.getInferState())#infer进度
+    print(zi2zi.getInferState())
     '''
     

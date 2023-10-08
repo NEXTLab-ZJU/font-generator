@@ -47,18 +47,18 @@ def draw_single_char_new(ch, font, canvas_size, x_offset=0, y_offset=0):
         img = transforms.ToTensor()(img)
     except SystemError:
         return None
-    img = img.unsqueeze(0)  # 加轴
-    pad_len = int(abs(width - height) / 2)  # 预填充区域的大小
-    # 需要填充区域，如果宽大于高则上下填充，否则左右填充
+    img = img.unsqueeze(0) 
+    pad_len = int(abs(width - height) / 2)  
+
     if width > height:
         fill_area = (0, 0, pad_len, pad_len)
     else:
         fill_area = (pad_len, pad_len, 0, 0)
-    # 填充像素常值
+
     fill_value = 1
     img = nn.ConstantPad2d(fill_area, fill_value)(img)
-    # img = nn.ZeroPad2d(m)(img) #直接填0
-    img = img.squeeze(0)  # 去轴
+    # img = nn.ZeroPad2d(m)(img) 
+    img = img.squeeze(0)  
     img = transforms.ToPILImage()(img)
     img = img.resize((canvas_size, canvas_size), Image.ANTIALIAS)
     return img
@@ -94,7 +94,7 @@ def filter_recurring_hash(charset, font, canvas_size, x_offset, y_offset):
 def font2img(dst_imgfolder, sample_dir, src="./data/font_src",  char_size =150, canvas_size=256,
              x_offset=20, y_offset=20, sample_count=100,  label=6, filter_by_hash=True):
     src_font = ImageFont.truetype(src, size=char_size)
-    #删除文件夹里的文件,以防止文件污染
+    # To delete the files inside a folder to prevent contamination
     for root,dirs,files in os.walk(sample_dir,topdown=False):
         for name in files:
             os.remove(os.path.join(root,name))

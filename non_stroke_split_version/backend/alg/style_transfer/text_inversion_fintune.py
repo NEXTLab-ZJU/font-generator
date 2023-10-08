@@ -428,14 +428,14 @@ def get_full_repo_name(model_id: str, organization: Optional[str] = None, token:
 
 class TextualInversionTrain(object):
     '''
-    初始化训练相关参数
+    pretraining params
     '''
     def __init__(self,trainData,base_dir='./',train_steps=3000,base_out_dir='./hanzi_result/',prompt="qingxin"):
         self.placeholder_token = prompt
-        #预训练模型
+        #pretrained model
         self.pretrained_model_name_or_path = os.path.join(base_dir,"stablediffusion/base_model")
         self.train_data_dir = trainData
-        #Ti模型保存位置
+        #Ti model save pos
         self.base_output_dir = os.path.join(base_out_dir,'model')
         self.output_dir = os.path.join(self.base_output_dir,"zd_"+prompt)
         self.logging_dir = os.path.join(base_out_dir,'logging')
@@ -448,11 +448,11 @@ class TextualInversionTrain(object):
         self.learning_rate = 5e-06
         #self.lr_scheduler = "constant"
         self.lr_warmup_steps = 0
-        #训练进度
+        #train process
         self.train_process = 0
-        #测试图片保存路径
+        #test pic save path
         self.infer_result = os.path.join(base_out_dir,'infer_result')
-        #预测进度
+        #infer process
         self.infer_process = 0
         
         if self.train_data_dir is None:
@@ -982,33 +982,30 @@ class TextualInversionTrain(object):
         accelerator.end_training()
 
 if __name__ == "__main__":
-    #初始化
+    #init
     
-    #参数是训练数据dir
     '''
     test = TextualInversionTrain('../../apple_offline_backend/data/zips/8010e61f-a392-4836-87d2-a2678be5b68f',base_dir="./")
 
-    #训练
+    #train
     test.train()
     '''
     '''
-    #获取训练进度
+    #get train state
     result = test.getTrainState()
 
-    #获取ckpt位置
+    #get ckpt pos
     result = test.getCkptResult()
 
-    #预测
-    device cuda地址
-    result 即diffuse模型地址
-    imgDir 即zi2zi的生成底图位置
-    其他参数按之前的
+    #infer
+    device cuda
+    result diffuse model addr
+    imgDir zi2zi image dir
+
     test.modelInfer(device,result,'./alg/hanzi_train/zi2zi_data/infer_data','qingxin',0.65,0.65,20,1)
 
-    #获取预测进度
     test.getInferState()
 
-    #获取预测结果位置
     test.getInferResult()
     '''
     '''
@@ -1018,7 +1015,7 @@ if __name__ == "__main__":
 
     test = TextualInversionTrain(path,base_dir="./alg/hanzi_train",train_steps=10,base_out_dir='./alg/hanzi_result/')
     
-    #train_steps =10 有默认值，测试可以改小，实际用时不用设置
+    #train_steps =10
 
     test.train()
     result = test.getTrainState()

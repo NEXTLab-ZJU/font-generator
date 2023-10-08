@@ -102,11 +102,10 @@ export default {
             if(!path) path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             
             path.setAttribute("id", 'bezierPath')
-            path.setAttribute("d", bezierSvgPath); // 创建一条对角线
+            path.setAttribute("d", bezierSvgPath);
             path.setAttribute("stroke", "black");
             path.setAttribute("stroke-width", "1");
             path.setAttribute("fill", "none");
-            // 将 <path> 元素添加到 SVG 元素中
             svg.appendChild(path);
 
             let onPoints = bezierPoints.map(

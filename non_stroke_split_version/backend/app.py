@@ -56,21 +56,21 @@ def get_progress():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    # 检查是否上传了文件
+    # Check if upload
     if 'file' not in request.files:
         return {
             "code":10000,
             "msg": 'failed',
         }
 
-    # 获取上传的文件
+    # get file
     file = request.files['file']
 
-    # 检查文件是否是zip压缩包
+    # Check if file is empty
     if file.filename.endswith('.zip'):
-        # 解压文件到指定目录
+        # generate file name
         folder_name = str(uuid.uuid4())
-        # 创建新的文件夹
+        # makr new file dir
         destination = os.path.join(data_path,'zips/') + folder_name
         os.makedirs(destination)
         

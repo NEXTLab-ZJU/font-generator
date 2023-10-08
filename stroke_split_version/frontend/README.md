@@ -14,7 +14,7 @@ Open src/config.js，modify backend request url
 npm run serve
 ```
 
-## 使用说明：
+## Usage：
 1. The system requires the upload of a ZIP compressed package containing a font bitmap already designed by the designer. The ZIP package must contain font bitmap images. A sample ZIP compressed package can be downloaded from the following link:
  https://zjueducn-my.sharepoint.com/:u:/g/personal/21921307_zju_edu_cn/EQvRsZFXm9NFl4xfLkOmrlwBZwdcxdnpXz9iwrZvFnl8Ig?e=NHvbFh
  (alternative link：https://gofile.me/73DMg/WV62YGV1m)
